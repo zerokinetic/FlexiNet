@@ -1,14 +1,9 @@
 import express from 'express'
+import cors from 'cors'
 import supabase from './supabaseClient.js'
 
 const app = express()
-app.use(express.json())
 
-// Authentication Routes
-const authRouter = express.Router()
-
-// User Registration
-authRouter.post('/register', async (req, res) => {
   try {
     const { email, password, name } = req.body
 
@@ -42,39 +37,6 @@ authRouter.post('/register', async (req, res) => {
   }
 })
 
-// User Login
-authRouter.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body
-
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password are required' })
-    }
-
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    })
-
-    if (error) throw error
-
-    // Get user role
-    const { data: userData, error: userError } = await supabase
-      .from('users')
-      .select('role')
-      .eq('id', data.user.id)
-      .single()
-
-    if (userError) throw userError
-
-    res.json({
-      user: data.user,
-      role: userData.role,
-      session: data.session
-    })
-  } catch (error) {
-    res.status(401).json({ error: error.message })
-  }
 })
 
 // Admin Registration
