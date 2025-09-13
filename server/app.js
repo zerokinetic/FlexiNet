@@ -1,51 +1,33 @@
-import supabase from './supabaseClient.js'
-
-// Insert data
-const insertData = async () => {
-  const { data, error } = await supabase
-    .from('users')
-    .insert([{ name: 'Heman', email: 'heman@example.com' }])
-
-  if (error) console.error(error)
-  else console.log('Inserted:', data)
-}
-
-// Fetch data
-const fetchData = async () => {
-  const { data, error } = await supabase
-    .from('users')
-    .select('*')
-
-
-  if (error) console.error(error)
-  else console.log('Fetched:', data)
-}
-
-insertData().then(fetchData)
-
-const signUpUser = async () => {
-    const { data, error } = await supabase.auth.signUp({
-      email: 'user@example.com',
-      password: 'password123'
-    })
-  
-    if (error) console.error(error)
-    else console.log('Signed up:', data)
-  }
-  
-  signUpUser()
-  
-
 import express from 'express'
 import supabase from './supabaseClient.js'
 
 const app = express()
+const PORT = process.env.PORT || 3000
+
+// Middleware
 app.use(express.json())
 
+// Routes
 app.get('/users', async (req, res) => {
-  const { data, error } = await supabase.from('users').select('*')
-  if (error) return res.status(500).json({ error: error.message })
-  res.json(data)
+  try {
+    const { data, error } = await supabase.from('users').select('*')
+    if (error) {
+      console.error('Database error:', error)
+      return res.status(500).json({ error: error.message })
+    }
+    res.json(data)
+  } catch (err) {
+    console.error('Server error:', err)
+    res.status(500).json({ error: 'Internal server error' })
+  }
 })
 
-app.listen(3000, () => console.log('Server running on http://localhost:3000'))
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() })
+})
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`)
+})
