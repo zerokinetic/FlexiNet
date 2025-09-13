@@ -16,6 +16,7 @@ const fetchData = async () => {
     .from('users')
     .select('*')
 
+
   if (error) console.error(error)
   else console.log('Fetched:', data)
 }
