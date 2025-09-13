@@ -1,13 +1,13 @@
-import supabase from './supabaseClient.js'
+const supabase = require('./supabaseClient.js');
 
 // Test functions for development/testing purposes
 // These can be run independently to test your Supabase connection
 
 // Insert data
-export const insertData = async () => {
+const insertData = async () => {
   try {
     const { data, error } = await supabase
-      .from('users')
+      .from('User_Data')
       .insert([{ name: 'Heman', email: 'heman@example.com' }])
 
     if (error) {
@@ -24,7 +24,7 @@ export const insertData = async () => {
 }
 
 // Fetch data
-export const fetchData = async () => {
+const fetchData = async () => {
   try {
     const { data, error } = await supabase
       .from('users')
@@ -44,7 +44,7 @@ export const fetchData = async () => {
 }
 
 // Sign up user
-export const signUpUser = async (email = 'user@example.com', password = 'password123') => {
+const signUpUser = async (email = 'user@example.com', password = 'password123') => {
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -65,7 +65,7 @@ export const signUpUser = async (email = 'user@example.com', password = 'passwor
 }
 
 // Run all tests
-export const runAllTests = async () => {
+const runAllTests = async () => {
   console.log('🧪 Running Supabase tests...\n')
   
   console.log('1. Testing data insertion...')
@@ -82,3 +82,10 @@ export const runAllTests = async () => {
 
 // Uncomment the line below to run tests when this file is executed directly
 // runAllTests()
+
+module.exports = {
+  insertData,
+  fetchData,
+  signUpUser,
+  runAllTests
+};
