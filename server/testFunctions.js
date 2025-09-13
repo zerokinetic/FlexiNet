@@ -8,7 +8,17 @@ const insertData = async () => {
   try {
     const { data, error } = await supabase
       .from('User_Data')
-      .insert([{ name: 'Heman', email: 'heman@example.com' }])
+      .insert([
+        {
+          "User Id": 102,
+          Name: 'Heman',
+          Phone: 1234567890,
+          Email: 'heman@example.com',
+          Status: 'active',
+          role: 'user',
+          password: 'Lumen@123'
+        }
+      ])
 
     if (error) {
       console.error('Insert error:', error)
@@ -27,7 +37,7 @@ const insertData = async () => {
 const fetchData = async () => {
   try {
     const { data, error } = await supabase
-      .from('users')
+      .from('User_Data')
       .select('*')
 
     if (error) {
@@ -44,7 +54,7 @@ const fetchData = async () => {
 }
 
 // Sign up user
-const signUpUser = async (email = 'user@example.com', password = 'password123') => {
+const signUpUser = async (email = 'user10@example.com', password = 'Lumen@123') => {
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -81,7 +91,7 @@ const runAllTests = async () => {
 }
 
 // Uncomment the line below to run tests when this file is executed directly
-// runAllTests()
+runAllTests()
 
 module.exports = {
   insertData,
